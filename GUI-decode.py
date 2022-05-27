@@ -11,10 +11,9 @@ window = Tk()
 window.title("Decode LSB")
 window.geometry("600x400")
 
-# decode
+# phương pháp dựa trên lý thuyết số học
+# Blum Blum Shub algorithm với p = 21169 và q = 22189
 def PRNG0(seed, total_pixels):
-    # phương pháp dựa trên lý thuyết số học
-    # Blum Blum Shub algorithm với p = 21169 và q = 22189
     return int(int(seed) ** 2 % (21169 * 22189)) % total_pixels
 
 
