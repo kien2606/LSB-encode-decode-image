@@ -1,10 +1,28 @@
 import numpy as np
 from PIL import Image
+import hashlib
+
+
 
 def PRNG0(seed, total_pixels):
     # phương pháp dựa trên lý thuyết số học
     # Blum Blum Shub algorithm với p = 21169 và q = 22189
     return int(int(seed) ** 2 % (21169 * 22189)) % total_pixels
+
+def PRNG1(seed, total_pixels):
+    # phương pháp cơ bản
+    # Phương pháp nửa bình phương (Middle-square method)
+    return int(str(int(seed) ** 2).zfill(8)[2:6]) % total_pixels
+
+def PRNG2(seed, total_pixels):
+    # phương pháp cơ bản
+    # phương pháp đồng dư bậc 2 với n = 10
+    return int(int(seed) * (int(seed) + 1) % 2**10) % total_pixels
+
+def PRNG3(seed, total_pixels):
+    # phương pháp dựa trên mật mã học nguyên thuỷ
+    # phương pháp sử dụng hàm băm SHA-256
+    return int.from_bytes(hashlib.sha256(str(seed).encode()).digest(), "little") % total_pixels
 
 
 def encode(src, message, dest):
@@ -36,7 +54,7 @@ def encode(src, message, dest):
         already_seen = list()
         seed = 1234
         while index < req_pixels:
-            seed = PRNG0(seed , total_pixels)
+            seed = PRNG3(seed , total_pixels)
             print("Next seed : ", seed)
             if seed not in already_seen:
                 already_seen.append(seed)
@@ -56,4 +74,4 @@ def encode(src, message, dest):
         enc_img.save(dest)
         print("Image Encoded Successfully")
     
-encode("C:\\Users\\Tran Hoai Nam\\Desktop\\codeLSB\\leesin.png", "select message", "C:\\Users\\Tran Hoai Nam\\Desktop\\codeLSB\\done.png")
+encode("C:\\Users\\84961\\Desktop\\SetoLSB\\raw\\cleanImg.png", "select message", "C:\\Users\\84961\\Desktop\\SetoLSB\\encode\\done.png")
